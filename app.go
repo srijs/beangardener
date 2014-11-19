@@ -66,6 +66,7 @@ func newProxy(addr *net.TCPAddr) func([]byte, *bufio.Reader, *net.TCPConn) {
 }
 
 func serveProxy(listener *net.TCPListener) {
+
 	proxyBean := newProxy(&net.TCPAddr{[]byte{127, 0, 0, 1}, 11300, ""})
 	proxyHttp := newProxy(&net.TCPAddr{[]byte{127, 0, 0, 1}, 8000, ""})
 
@@ -93,7 +94,6 @@ func serveProxy(listener *net.TCPListener) {
 			} else {
 				proxyHttp(line, reader, conn)
 			}
-
 		}()
 	}
 
@@ -102,7 +102,13 @@ func serveProxy(listener *net.TCPListener) {
 func main() {
 
 	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(200)
+    err := checkHealth()
+    if err != nil {
+      log.Print(err)
+      w.WriteHeader(500)
+    } else {
+		  w.WriteHeader(200)
+    }
 	})
 
 	log.Println("Serving HTTP...")
