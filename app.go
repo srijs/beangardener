@@ -102,13 +102,13 @@ func serveProxy(listener *net.TCPListener) {
 func main() {
 
 	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
-    err := checkHealth()
-    if err != nil {
-      log.Print(err)
-      w.WriteHeader(500)
-    } else {
-		  w.WriteHeader(200)
-    }
+		err := checkHealth()
+		if err != nil {
+			log.Print(err)
+			w.WriteHeader(500)
+		} else {
+			w.WriteHeader(200)
+		}
 	})
 
 	log.Println("Serving HTTP...")
